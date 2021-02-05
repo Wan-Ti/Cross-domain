@@ -55,4 +55,76 @@ JSONP就是基于这两点，再与服务器配合来实现跨域请求，它的
 var img=new Image();
 img.src="..."
 ```
+## 动态服务器
 
+**判断依据**
+
+* 是否请求了数据库
+  
+  没有请求数据库就是静态服务器。请求了数据库，就是动态服务器。今天使用json文件当作数据库。
+  
+
+**/db/user.json**
+
+* 结构：一个数组
+
+```
+[
+	{id:1,name:'wanti',password: '***',age:18},
+    {id:2,name:'jack',password:'***',age:20}
+]
+```
+
+* 读取users数据
+ 
+ 首先:</br>`fs.readFileSync('./db/users.json').toString()`;</br>
+ 然后JSON.parse反序列化，得到数组。
+ 
+* 存储users数据
+首先：</br>
+JSON.stringify序列化，得到字符串。</br>
+然后：</br>
+`fs.wirteFileSync('./db/users/json',data)`
+
+## Cookie
+
+**定义**
+
+Cookie是服务器下发给浏览器的一段字符串；</br>
+浏览器必须保存这个Cookie;</br>
+之后发起相同二级域名请求(任何请求)时，浏览器必须附上Cookie;
+
+**举例：**
+  
+Cookie相当于进入公园的门票，有了门票检票员才能知道你可以进去。有Cookie就是登录，没有Cookie就没有登录。
+
+**Cookie/Session总结**
+
+* 服务器可以给浏览器下发Cookie
+  
+  通过Response Header;</br>
+  具体语法见MDN；
+
+* 浏览器上的Cookie可以被篡改
+  
+  使用开发者工具就能更改；</br>
+  
+
+* 服务器下发不可篡改的Cookie
+
+  Cookie可包含加密后的信息(不过需要解密);</br>
+  Cookie也可只包含一个id(id是一个随机数);</br>
+  用session[id]可以在后端拿到对应的信息；</br>
+
+* Cookie的专署ID无法被篡改
+
+**Cookie和Session的区别：**
+
+* Cookie存在浏览器，Session存在服务器；
+* Cookie长度有限制，Session一般没有；
+* Session是借助Cookie实现的，id存放在Cookie;
+
+**Cookie和LocalStorage的区别：**
+
+* Cookie会被放在每一次的请求里，LocalStorage不会；
+* Cookie长度有限制，而LocalStorage的长度一般为5M~10M
